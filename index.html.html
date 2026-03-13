@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KONG — Luminize Brand Intelligence Report</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #0e1420;
+  color: #e2e8f0;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  min-width: 1100px;
+}
+.header {
+  background: #0e1420;
+  padding: 28px 40px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.report-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #22d3ee;
+  margin-bottom: 6px;
+}
+.brand-name {
+  font-size: 52px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -1px;
+  margin-bottom: 8px;
+}
+.brand-name .w { color: #ffffff; }
+.brand-name .c { color: #22d3ee; }
+.brand-meta { font-size: 13px; color: #94a3b8; }
+.res-card {
+  background: #1a2235;
+  border: 1px solid #2d3a52;
+  border-radius: 8px;
+  padding: 16px 24px;
+  text-align: center;
+  min-width: 220px;
+}
+.res-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  margin-bottom: 8px;
+}
+.res-score {
+  font-size: 52px;
+  font-weight: 900;
+  color: #22d3ee;
+  line-height: 1;
+  letter-spacing: -2px;
+}
+.res-score .denom { font-size: 22px; color: #64748b; font-weight: 600; letter-spacing: 0; }
+.res-verdict {
+  font-size: 12px;
+  font-weight: 700;
+  color: #f59e0b;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 6px;
+}
+.data-pulled { font-size: 11px; color: #475569; margin-top: 10px; text-align: right; }
+
+/* KPI STRIP */
+.kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  padding: 0 40px 20px;
+}
+.kpi-card {
+  background: #131c2e;
+  border: 1px solid #1e2d45;
+  border-radius: 8px;
+  padding: 18px 20px;
+  position: relative;
+  overflow: hidden;
+}
+.kpi-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+.kpi-teal::before   { background: #22d3ee; }
+.kpi-purple::before { background: #a855f7; }
+.kpi-yellow::before { background: #f59e0b; }
+.kpi-red::before    { background: #f43f5e; }
+.kpi-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #64748b; margin-bottom: 8px; }
+.kpi-value { font-size: 34px; font-weight: 800; color: #f1f5f9; letter-spacing: -1px; line-height: 1; margin-bottom: 6px; }
+.kpi-sub { font-size: 12px; color: #64748b; }
+.kpi-delta { font-size: 12px; font-weight: 600; margin-top: 3px; }
+.dg { color: #4ade80; } .dr { color: #f43f5e; } .dy { color: #f59e0b; }
+
+/* FLYWHEEL LABEL */
+.flywheel-label {
+  padding: 0 40px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #475569;
+}
+.flywheel-label .dot { color: #334155; margin: 0 5px; }
+
+/* QUADRANT GRID */
+.quadrant-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 0 40px 12px;
+}
+.q-card {
+  background: #131c2e;
+  border: 1px solid #1e2d45;
+  border-radius: 10px;
+  padding: 24px 26px;
+  position: relative;
+  overflow: hidden;
+}
+.q-card::before { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 3px; }
+.qt::before { background: #22d3ee; }
+.qr::before { background: #f43f5e; }
+.qg::before { background: #4ade80; }
+.qy::before { background: #f59e0b; }
+
+.q-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+.q-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
+.qt .q-eyebrow { color: #22d3ee; }
+.qr .q-eyebrow { color: #f43f5e; }
+.qg .q-eyebrow { color: #4ade80; }
+.qy .q-eyebrow { color: #f59e0b; }
+.q-title { font-size: 30px; font-weight: 800; color: #f1f5f9; letter-spacing: -0.5px; line-height: 1; margin-bottom: 4px; }
+.q-subtitle { font-size: 12px; color: #475569; font-style: italic; }
+.q-score { text-align: right; }
+.q-score-num { font-size: 52px; font-weight: 900; line-height: 1; letter-spacing: -2px; }
+.qt .q-score-num { color: #22d3ee; }
+.qr .q-score-num { color: #f43f5e; }
+.qg .q-score-num { color: #4ade80; }
+.qy .q-score-num { color: #f59e0b; }
+.q-score-denom { font-size: 16px; color: #475569; font-weight: 600; display: block; text-align: right; margin-top: -4px; }
+.q-score-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; text-align: right; margin-top: 3px; }
+.qt .q-score-label { color: #22d3ee; }
+.qr .q-score-label { color: #f43f5e; }
+.qg .q-score-label { color: #4ade80; }
+.qy .q-score-label { color: #f59e0b; }
+
+/* METRIC ROWS */
+.metric-rows { display: flex; flex-direction: column; margin-bottom: 20px; border-top: 1px solid #1e2d45; }
+.metric-row { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid #1e2d45; }
+.metric-label { font-size: 12px; font-weight: 500; color: #cbd5e1; width: 220px; flex-shrink: 0; }
+.metric-bar-wrap { flex: 1; height: 7px; background: #1a2538; border-radius: 4px; overflow: hidden; }
+.metric-bar { height: 100%; border-radius: 4px; }
+.bt { background: #22d3ee; } .bg { background: #4ade80; } .by { background: #f59e0b; }
+.br { background: #f43f5e; } .bo { background: #fb923c; } .bp { background: #a855f7; }
+.metric-value { font-size: 13px; font-weight: 700; width: 110px; text-align: right; flex-shrink: 0; }
+.vt { color: #22d3ee; } .vg { color: #4ade80; } .vy { color: #f59e0b; }
+.vr { color: #f43f5e; } .vo { color: #fb923c; } .vw { color: #f1f5f9; }
+
+/* BLURB */
+.q-blurb { background: #0e1420; border: 1px solid #1e2d45; border-radius: 6px; padding: 14px 16px; font-size: 12.5px; color: #94a3b8; line-height: 1.65; }
+.q-blurb strong { color: #e2e8f0; font-weight: 600; }
+.q-blurb .ct { color: #22d3ee; font-weight: 600; }
+.q-blurb .co { color: #fb923c; font-weight: 600; }
+
+/* GAP BANNER */
+.gap-banner {
+  margin: 0 40px 12px;
+  background: #131c2e;
+  border: 1px solid #2d3a52;
+  border-radius: 10px;
+  padding: 28px 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  position: relative;
+  overflow: hidden;
+}
+.gap-banner::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, #a855f7, #22d3ee); }
+.gap-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #a855f7; margin-bottom: 10px; }
+.gap-headline { font-size: 22px; font-weight: 800; color: #f1f5f9; margin-bottom: 12px; line-height: 1.3; }
+.gap-headline .hlt { color: #22d3ee; }
+.gap-body { font-size: 13px; color: #64748b; max-width: 620px; line-height: 1.65; }
+.gap-body .hl { color: #22d3ee; font-weight: 600; }
+.gap-right { text-align: right; flex-shrink: 0; }
+.gap-amount { font-size: 52px; font-weight: 900; color: #22d3ee; letter-spacing: -2px; line-height: 1; }
+.gap-amount-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #475569; margin-top: 4px; }
+
+/* FOOTER */
+.footer { padding: 28px 40px 24px; display: flex; align-items: center; justify-content: space-between; background: #0e1420; }
+.logo { font-size: 24px; font-weight: 900; letter-spacing: -0.5px; }
+.logo .lumi { color: #ffffff; }
+.logo .nize { color: #7c3aed; }
+.footer-tagline { font-size: 11px; color: #475569; margin-top: 3px; font-style: italic; }
+.footer-formula { font-size: 12px; color: #64748b; letter-spacing: 0.01em; text-align: center; }
+.footer-formula strong { color: #94a3b8; font-weight: 600; }
+.footer-sub { font-size: 10px; color: #334155; margin-top: 4px; font-style: italic; text-align: center; }
+.cta-btn { background: #7c3aed; color: #fff; font-size: 13px; font-weight: 800; letter-spacing: 0.08em; padding: 14px 30px; border-radius: 6px; text-decoration: none; display: inline-block; text-transform: uppercase; }
+.footer-date { font-size: 11px; color: #334155; margin-top: 6px; text-align: right; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <div class="report-eyebrow">Luminize Brand Intelligence Report</div>
+    <div class="brand-name"><span style="background: linear-gradient(90deg, #a855f7, #22d3ee); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">KONG</span></div>
+    <div class="brand-meta">Pet Supplies &nbsp;·&nbsp; Dog Toys / Treats / Accessories &nbsp;·&nbsp; 315 ASINs ($1K+/mo)</div>
+  </div>
+  <div>
+    <div class="res-card">
+      <div class="res-label">Revenue Efficiency Score</div>
+      <div class="res-score">5.5<span class="denom">/10</span></div>
+      <div class="res-verdict">⚡ Needs Work</div>
+    </div>
+    <div class="data-pulled">Data pulled: Mar 12, 2026 &nbsp;·&nbsp; SmartScout + Keepa + H10</div>
+  </div>
+</div>
+
+<!-- KPI STRIP -->
+<div class="kpi-strip">
+  <div class="kpi-card kpi-teal">
+    <div class="kpi-label">Est. Annual Revenue</div>
+    <div class="kpi-value">$32.4M</div>
+    <div class="kpi-sub">Trailing 12 months</div>
+    <div class="kpi-delta dg">↑ 28.2% YoY growth</div>
+  </div>
+  <div class="kpi-card kpi-purple">
+    <div class="kpi-label">Monthly Run Rate</div>
+    <div class="kpi-value">$3.4M</div>
+    <div class="kpi-sub">Jan 2026 estimate</div>
+    <div class="kpi-delta dr">↓ 21.8% MoM</div>
+  </div>
+  <div class="kpi-card kpi-yellow">
+    <div class="kpi-label">Avg. In-Stock Rate</div>
+    <div class="kpi-value">88.8%</div>
+    <div class="kpi-sub">Across 315 ASINs ($1K+/mo)</div>
+    <div class="kpi-delta dy">~ Near category avg: ~90%</div>
+  </div>
+  <div class="kpi-card kpi-red">
+    <div class="kpi-label">Buy Box – Brand Win%</div>
+    <div class="kpi-value">70.8%</div>
+    <div class="kpi-sub">Avg across $1K+ ASINs (90d)</div>
+    <div class="kpi-delta dr">↓ 26.5% held by unauthorized 3P</div>
+  </div>
+</div>
+
+<!-- FLYWHEEL LABEL -->
+<div class="flywheel-label">
+  Amazon Flywheel Scorecard <span class="dot">·</span> Sessions <span class="dot">×</span> Buy Box % <span class="dot">×</span> Conversion <span class="dot">×</span> AOV <span class="dot">=</span> Revenue
+</div>
+
+<!-- QUADRANT GRID -->
+<div class="quadrant-grid">
+
+  <!-- Q1 SESSIONS -->
+  <div class="q-card qt">
+    <div class="q-top">
+      <div>
+        <div class="q-eyebrow">01 · Flywheel Entry</div>
+        <div class="q-title">SESSIONS</div>
+        <div class="q-subtitle">Are enough shoppers finding KONG? <span style="color:#334155;font-size:11px;">· Brand-level data</span></div>
+      </div>
+      <div class="q-score">
+        <div class="q-score-num">5.5</div>
+        <div class="q-score-denom">/10</div>
+        <div class="q-score-label">Moderate</div>
+      </div>
+    </div>
+    <div class="metric-rows">
+      <div class="metric-row">
+        <div class="metric-label">Branded Search Volume (Top Terms)</div>
+        <div class="metric-bar-wrap"><div class="metric-bar bt" style="width:78%"></div></div>
+        <div class="metric-value vt">201K+/mo</div>
+      </div>
+      <div class="metric-row">
+        <div class="metric-label">Non-branded Category Reach</div>
+        <div class="metric-bar-wrap"><div class="metric-bar by" style="width:20%"></div></div>
+        <div class="metric-value vy">Low</div>
+      </div>
+      <div class="metric-row">
+        <div class="metric-label">SP #1 Win Rate (Non-branded)</div>
+        <div class="metric-bar-wrap"><div class="metric-bar br" style="width:5%"></div></div>
+        <div class="metric-value vr">&lt;3%</div>
+      </div>
+      <div class="metric-row">
+        <div class="metric-label">Subcategory Presence</div>
+        <div class="metric-bar-wrap"><div class="metric-bar bt" style="width:85%"></div></div>
+        <div class="metric-value vt">49 subcats</div>
+      </div>
+    </div>
+    <div class="q-blurb">
+      <strong>Branded search is dominant</strong> — "kong dog toys" alone drives 76K searches/month. But KONG is nearly invisible on non-branded terms like "dog toys" (245K/mo) and "dog toys for aggressive chewers" (105K/mo) where organic position is 15 and 5 respectively with near-zero sponsored coverage. <strong>Massive category traffic being left to competitors.</strong>
+    </div>
+  </div>
+
+  <!-- Q2 BUY BOX -->
+  <div class="q-card qr">
+    <div class="q-top">
+      <div>
+        <div class="q-eyebrow">02 · Flywheel Friction</div>
+        <div class="q-title">BUY BOX</div>
+        <div class="q-subtitle">Is KONG capturing the sale when shoppers arrive?</div>
+      </div>
+      <div class="q-score">
+        <div class="q-score-num">4.5</div>
+        <div class="q-score-denom">/10</div>
+        <div class="q-score-label">Concerning</div>
+      </div>
+    </div>
+    <div class="metric-rows">
+      <div class="metric-row">
+        <div class="metric-label">KONG Buy Box Win Rate (90d)</div>
+        <div class="metric-bar-wrap"><div class="metric-bar by" style="width:71%"></div></div>
+        <div class="metric-value vy">70.8%</div>
+      </div>
+      <div class="metric-row">
+        <div class="metric-label">Amazon.com Buy Box Win Rate</div>
+        <div class="metric-bar-wrap"><div class="metric-bar bo" style="width:4%"></div></div>
+        <div class="metric-value vo">2.7%</div>
+      </div>
+      <div class="metric-row">
+        <div class="metric-label">ASINs with 2+ Competing Sellers</div>
+        <div class="metric-bar-wrap"><div class="metric-bar br" style="width:81%"></div></div>
+        <div class="metric-value vr">256 of 315</div>
+      </div>
+      <div class="metric-row">
+        <div class="metric-label">ASINs with 3+ Competing Sellers</div>
+        <div class="metric-bar-wrap"><div class="metric-bar br" style="width:62%"></div></div>
+        <div class="metric-value vr">195 of 315</div>
+      </div>
+    </div>
+    <div class="q-blurb">
+      <strong>KONG controls the buy box on only 36% of active ASINs right now.</strong> CountryMax currently holds the buy box on 64 ASINs (20%) — an unauthorized reseller rotating in 26.5% of the time across the catalog. On average 5 sellers are competing for the buy box per ASIN over 90 days. With 195 of the top 315 ASINs having 3+ competing sellers, price integrity and brand equity are eroding on the products that matter most.
+    </div>
+  </div>
+
+  <!-- Q3 CONVERSION -->
+  <div class="q-card qg">
+    <div class="q-top">
+      <div>
+        <div class="q-eyebrow">03 · Flywheel Accelerant</div>
+        <div class="q-title">CONVERSION</div>
+        <div class="q-subtitle">Are listings converting browsers to buyers?</div>
+      </div>
+      <div class="q-score">
+        <div class="q-score-num">5.5</div>
+        <div class="q-score-denom">/10</div>
+        <div class="q-score-label">Average</div>
+      </div>
+    </div>
+    <div class="metric-rows">
+      <div class="metric-row">
+        <div class="metric-label">Average Star Rating</div>
+        <div class="metric-bar-wrap"><div class="metric-bar bg" style="width:87%"></div></div>
+        <div class="metric-value vg">4.35 ★</div>
+      </div>
+      <div class="metric-row">
+        <div class="metric-label">Total Review Count (catalog)</div>
+        <div class="metric-bar-wrap"><div class="metric-bar bg" style="width:85%"></div></div>
+        <div class="metric-value vg">3.0M+</div>
+      </div>
+      <div class="metric-row">
+        <div class="metric-label">Hero ASIN Reviews (KONG Classic)</div>
+        <div class="metric-bar-wrap"><div class="metric-bar bt" style="width:70%"></div></div>
+        <div class="metric-value vt">91,138</div>
+      </div>
+      <div class="metric-row">
+        <div class="metric-label">ASINs with Active Coupons</div>
+        <div class="metric-bar-wrap"><div class="metric-bar br" style="width:2%"></div></div>
+        <div class="metric-value vr">0 of 315</div>
+      </div>
+    </div>
+    <div class="q-blurb">
+      <strong>KONG's strongest quadrant.</strong> 3.0M reviews and a 4.35★ average across top ASINs provide category-defining social proof. Hero ASIN KONG Classic with 91,138 reviews is one of the most reviewed pet products on Amazon. <strong>Opportunity: activate promotional tools (coupons, Subscribe &amp; Save) across more ASINs.</strong> Zero active coupons across 315 revenue-generating ASINs is a significant missed conversion lever.
+    </div>
+  </div>
+
+  <!-- Q4 AOV & AVAILABILITY -->
+  <div class="q-card qy">
+    <div class="q-top">
+      <div>
+        <div class="q-eyebrow">04 · Flywheel Multiplier</div>
+        <div class="q-title">AOV &amp; AVAILABILITY</div>
+        <div class="q-subtitle">Is KONG maximizing every transaction?</div>
+      </div>
+      <div class="q-score">
+        <div class="q-score-num">6.5</div>
+        <div class="q-score-denom">/10</div>
+        <div class="q-score-label">Moderate</div>
+      </div>
+    </div>
+    <div class="metric-rows">
+      <div class="metric-row">
+        <div class="metric-label">Avg. In-Stock Rate (catalog)</div>
+        <div class="metric-bar-wrap"><div class="metric-bar bg" style="width:89%"></div></div>
+        <div class="metric-value vg">88.8%</div>
+      </div>
+      <div class="metric-row">
+        <div class="metric-label">ASINs OOS &gt;30% of 90 days</div>
+        <div class="metric-bar-wrap"><div class="metric-bar by" style="width:13%"></div></div>
+        <div class="metric-value vy">42 of 315</div>
+      </div>
+      <div class="metric-row">
+        <div class="metric-label">Avg Selling Price (current)</div>
+        <div class="metric-bar-wrap"><div class="metric-bar bg" style="width:50%"></div></div>
+        <div class="metric-value vg">$19.65</div>
+      </div>
+      <div class="metric-row">
+        <div class="metric-label">Price Stability (90d BB drop)</div>
+        <div class="metric-bar-wrap"><div class="metric-bar br" style="width:75%"></div></div>
+        <div class="metric-value vr">Eroding</div>
+      </div>
+    </div>
+    <div class="q-blurb">
+      <strong>Inventory health is reasonable but not clean.</strong> At 88.8% avg in-stock across $1K+/mo ASINs, KONG is near category average — but 42 revenue-generating ASINs are still losing the buy box more than 30% of the time. Each of those stockouts resets BSR and hands repeat purchases to competitors. At $2.3M/mo in tracked revenue, the OOS gap represents <strong>an estimated $3.1M in recoverable annual sales on core SKUs alone.</strong>
+    </div>
+  </div>
+
+</div>
+
+<!-- REVENUE GAP BANNER -->
+<div class="gap-banner">
+  <div>
+    <div class="gap-eyebrow">Revenue Gap Analysis</div>
+    <div class="gap-headline">
+      KONG's core catalog is solid — but <span class="hlt">3P fragmentation is the real threat.</span>
+    </div>
+    <div class="gap-body">
+      Among the 315 ASINs doing $1K+/mo, inventory health is near category average at 88.8%. The real problem is seller control — 306 active 3P sellers competing on KONG's own listings, with CountryMax alone capturing 15.4% of brand revenue. Reclaiming buy box control and fixing the 42 chronically OOS core SKUs represents an estimated <span class="hl">$3.1M in recoverable annual revenue</span> — on products already proven to sell.
+    </div>
+  </div>
+  <div class="gap-right">
+    <div class="gap-amount">$3.1M</div>
+    <div class="gap-amount-label">Est. Recoverable<br>Annual Revenue</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div>
+    <div class="logo"><span class="lumi">LUMIN</span><span class="nize">IZE</span></div>
+    <div class="footer-tagline">Amazon is not your friend. We are.</div>
+  </div>
+  <div>
+    <div class="footer-formula">Revenue = <strong>Sessions</strong> × <strong>Buy Box %</strong> × <strong>Conversion Rate</strong> × <strong>AOV</strong></div>
+    <div class="footer-sub">Scored across Traffic · Buy Box Control · Listing Quality · Inventory Health</div>
+  </div>
+  <div style="text-align:right">
+    <a href="#" class="cta-btn">Speak With a Friend →</a>
+    <div class="footer-date">luminize.co &nbsp;·&nbsp; Mar 2026</div>
+  </div>
+</div>
+
+</body>
+</html>
